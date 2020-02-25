@@ -2,7 +2,6 @@ const express = require('express')
 const router = express.Router()
 const request = require('request')
 const querystring = require('querystring')
-
 router.get('/', (req, res) => {
   const code = req.query.code || null
   const authOptions = {
@@ -13,11 +12,11 @@ router.get('/', (req, res) => {
       grant_type: 'authorization_code'
     },
     headers: {
-      'Authorization': 'Basic ' + (new Buffer(process.env.CLIENT_ID + ':' + process.env.CLIENT_SECRET).toString('base64'))
+      'Authorization': 'Basic ' + (Buffer.from(process.env.CLIENT_ID + ':' + process.env.CLIENT_SECRET).toString('base64'))
     },
     json: true
   }
-  
+
   request.post(authOptions, (error, response, body) => {
     if (!error && res.statusCode === 200) {
       res.cookie('SPOTIFY_ACCESS_TOKEN', body.access_token)
